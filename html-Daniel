@@ -1,0 +1,635 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5eee2">
+<title>Для Данила ♡</title>
+<style>
+:root {
+  --cream: #f5eee2;
+  --paper: #fffaf2;
+  --brown: #39271e;
+  --brown2: #594131;
+  --gold: #b9975b;
+  --gold-light: #e4d2ad;
+  --muted: #8d7967;
+  --line: #e5d9c6;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--brown);
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.8;
+}
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; cursor: pointer; }
+a { color: inherit; }
+button:focus-visible, a:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+::selection { background: var(--gold-light); color: var(--brown); }
+
+/* Входной экран */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 24px;
+  background:
+    radial-gradient(ellipse at 50% 35%, #fffdf8, transparent 70%),
+    var(--cream);
+  text-align: center;
+  transition: opacity .8s ease, visibility .8s ease;
+}
+.intro.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.intro-inner { width: min(100%, 370px); }
+.eyebrow {
+  color: var(--gold);
+  font: 10px/1.8 Arial, sans-serif;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+.intro h1 {
+  margin: 18px 0 8px;
+  font-size: clamp(32px, 8vw, 43px);
+  line-height: 1.25;
+  font-weight: normal;
+}
+.intro-copy { color: var(--muted); font-size: 14px; }
+.envelope {
+  position: relative;
+  display: block;
+  width: min(290px, 82vw);
+  height: 184px;
+  margin: 38px auto 24px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--gold);
+  background: #ddc59d;
+  box-shadow: 0 20px 50px #47311d1b;
+  perspective: 700px;
+}
+.env-letter {
+  position: absolute;
+  inset: 14px 22px;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  color: var(--brown);
+  font-size: 23px;
+  transition: transform .7s ease;
+}
+.env-flap {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: #cdb185;
+  clip-path: polygon(0 0, 100% 0, 50% 65%);
+  transform-origin: top;
+  transition: transform .7s ease;
+}
+.env-seal {
+  position: absolute;
+  z-index: 3;
+  top: 52%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  transform: translate(-50%, -50%);
+  border: 1px solid #f2dfb8;
+  border-radius: 50%;
+  background: #783d30;
+  color: #f4dfb5;
+  font-size: 25px;
+  box-shadow: 0 4px 10px #39271e25;
+  transition: opacity .3s, transform .3s;
+}
+.envelope:hover .env-seal { transform: translate(-50%, -50%) scale(1.06); }
+.intro.opening .env-flap { transform: rotateX(180deg); }
+.intro.opening .env-letter { transform: translateY(-48px); }
+.intro.opening .env-seal { opacity: 0; }
+.hint { color: var(--muted); font-size: 12px; }
+
+/* Главный экран */
+.hero {
+  position: relative;
+  display: flex;
+  min-height: 83svh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 55px 22px;
+  background:
+    radial-gradient(ellipse at 50% 20%, #74543b 0%, transparent 65%),
+    var(--brown);
+  color: var(--cream);
+  text-align: center;
+}
+.hero::before, .hero::after {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  border: 1px solid #c5a66a30;
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+.hero::before { top: -145px; left: -110px; }
+.hero::after { right: -140px; bottom: -165px; width: 330px; height: 330px; }
+.hero-content { position: relative; z-index: 1; }
+.hero h2 {
+  margin: 24px 0 18px;
+  color: var(--cream);
+  font-size: clamp(42px, 10vw, 68px);
+  font-weight: normal;
+  line-height: 1.2;
+}
+.hero-subtitle {
+  max-width: 350px;
+  color: #e7dac7;
+  font-size: 16px;
+  font-style: italic;
+}
+.ornament { margin: 20px 0; color: var(--gold); font-size: 25px; }
+.gold-button {
+  display: inline-block;
+  margin-top: 22px;
+  padding: 12px 23px;
+  border: 1px solid var(--gold);
+  background: var(--gold);
+  color: #2d2017;
+  text-decoration: none;
+  font-size: 13px;
+  transition: background .25s, transform .25s;
+}
+.gold-button:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+/* Навигация */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 10px 8px;
+  border-bottom: 1px solid #ffffff10;
+  background: #2d2019;
+}
+nav a {
+  padding: 8px 12px;
+  color: #eadfce;
+  font: 11px Arial, sans-serif;
+  text-decoration: none;
+}
+nav a:hover { color: var(--gold-light); }
+
+/* Содержимое */
+main { width: min(100% - 32px, 740px); margin: auto; padding-bottom: 65px; }
+section { padding-top: 62px; scroll-margin-top: 60px; }
+.section-label {
+  color: #9a7848;
+  font: 10px Arial, sans-serif;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+h2.section-title {
+  margin: 12px 0;
+  color: var(--brown);
+  font-size: clamp(28px, 6vw, 39px);
+  font-weight: normal;
+  line-height: 1.3;
+}
+.lead { color: var(--muted); font-size: 14px; }
+.paper {
+  position: relative;
+  margin-top: 24px;
+  padding: clamp(23px, 5vw, 42px);
+  border: 1px solid #dfceb1;
+  background:
+    linear-gradient(135deg, #ffffff70, transparent 65%),
+    var(--paper);
+  box-shadow: 0 14px 40px #39271e0d;
+}
+.paper-ornament { margin-bottom: 17px; color: var(--gold); text-align: center; font-size: 21px; }
+.letter-text { font-size: 15px; line-height: 2; white-space: pre-line; }
+.signature {
+  margin-top: 26px;
+  padding-top: 19px;
+  border-top: 1px solid var(--line);
+  color: #8d734d;
+  text-align: center;
+  font-style: italic;
+}
+
+/* 25 причин */
+.reasons {
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: reason;
+}
+.reasons li {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 9px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+  counter-increment: reason;
+  font-size: 15px;
+}
+.reasons li::before {
+  color: #a0804d;
+  content: counter(reason, decimal-leading-zero);
+  font: 11px Arial, sans-serif;
+  padding-top: 6px;
+}
+
+/* Интерактивные письма */
+.letters-list { margin-top: 25px; border-top: 1px solid var(--line); }
+.letter-item { border-bottom: 1px solid var(--line); }
+.letter-toggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 13px;
+  padding: 18px 2px;
+  border: 0;
+  background: transparent;
+  color: var(--brown);
+  text-align: left;
+}
+.letter-number { color: #a0804d; font: 11px Arial, sans-serif; }
+.letter-title { flex: 1; font-size: 15px; line-height: 1.6; }
+.plus { color: var(--gold); font-size: 23px; transition: transform .25s; }
+.letter-item.open .plus { transform: rotate(45deg); }
+.letter-content {
+  display: none;
+  margin: 0 0 17px 25px;
+  padding: 20px;
+  border-left: 2px solid var(--gold);
+  background: var(--paper);
+  font-size: 14px;
+  line-height: 1.95;
+  white-space: pre-line;
+  animation: fadeIn .3s ease;
+}
+.letter-item.open .letter-content { display: block; }
+.letter-item.open .letter-title { color: #9a7848; }
+.progress-note { color: var(--muted); font-size: 12px; }
+
+/* Финал */
+.final-button {
+  display: block;
+  width: 100%;
+  margin: 22px auto 0;
+  padding: 14px 18px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--brown);
+  font-size: 14px;
+}
+.final-button:disabled { opacity: .55; cursor: not-allowed; }
+.final-button:not(:disabled):hover { background: var(--gold-light); }
+.final-overlay[hidden] { display: none; }
+.final-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  padding: 18px;
+  background: #211711db;
+  backdrop-filter: blur(5px);
+  animation: fadeIn .3s ease;
+}
+.final-card {
+  position: relative;
+  width: min(100%, 520px);
+  margin: auto;
+  padding: clamp(27px, 6vw, 48px);
+  border: 1px solid var(--gold);
+  background: var(--paper);
+  text-align: center;
+  box-shadow: 0 20px 70px #0003;
+}
+.final-close {
+  position: absolute;
+  top: 8px;
+  right: 15px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 29px;
+}
+.final-card h2 { margin: 20px 0; font-size: clamp(28px, 7vw, 39px); font-weight: normal; line-height: 1.3; }
+.final-message { font-size: 14px; line-height: 2; white-space: pre-line; }
+.final-ornament { color: var(--gold); font-size: 23px; letter-spacing: 5px; }
+.final-signature { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--line); color: #967647; font-style: italic; }
+
+/* Подвал */
+footer {
+  padding: 40px 20px;
+  background: var(--brown);
+  color: #eee2d0;
+  text-align: center;
+}
+footer .heart { color: var(--gold); font-size: 27px; }
+footer p { font-size: 13px; color: #d5c5ae; }
+.backtop {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 9px 16px;
+  border: 1px solid #b9975b88;
+  background: transparent;
+  color: var(--cream);
+  text-decoration: none;
+  font-size: 12px;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 440px) {
+  nav { gap: 0; padding: 8px 2px; }
+  nav a { padding: 9px 8px; font-size: 10px; }
+  .hero { min-height: 78svh; }
+  .letter-content { margin-left: 8px; padding: 16px; }
+  .letter-toggle { gap: 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ВСТУПИТЕЛЬНЫЙ КОНВЕРТ -->
+<div class="intro" id="intro">
+  <div class="intro-inner">
+    <div class="eyebrow">A LETTER FOR YOU</div>
+    <h1>Для моего Даника</h1>
+    <p class="intro-copy">Маленький подарок, в котором много любви 🤍</p>
+    <button class="envelope" id="openEnvelope" type="button" aria-label="Открыть конверт">
+      <span class="env-letter">Для Данила ♡</span>
+      <span class="env-flap"></span>
+      <span class="env-seal">♡</span>
+    </button>
+    <p class="hint">Нажми на печать, чтобы открыть</p>
+  </div>
+</div>
+
+<header class="hero" id="home">
+  <div class="hero-content">
+    <div class="eyebrow">A personal gift · Made with love</div>
+    <div class="ornament">✧</div>
+    <h2>Данил,<br>это для тебя.</h2>
+    <p class="hero-subtitle">Некоторые люди приходят в жизнь<br>как ответ на молитву.</p>
+    <div class="ornament">— ♡ —</div>
+    <a class="gold-button" href="#letter">Открыть мой подарок</a>
+  </div>
+</header>
+
+<nav aria-label="Разделы сайта">
+  <a href="#letter">Письмо</a>
+  <a href="#reasons">25 причин</a>
+  <a href="#when">Открой, когда…</a>
+</nav>
+
+<main>
+  <section id="letter">
+    <div class="section-label">01 · От всего сердца</div>
+    <h2 class="section-title">Мой дорогой Данил</h2>
+    <p class="lead">Несколько слов, которые я хочу, чтобы ты сохранил.</p>
+    <article class="paper">
+      <div class="paper-ornament">✧ ♡ ✧</div>
+      <div class="letter-text">Мой дорогой Данил🥹❤️ Сегодня твой день и я очень рада, что 25 лет назад родился ты🥹❤️ Буквально несколько часов назад я сказала: Господи, спасибо за Даника🥰 И так я говорю уже на протяжении 3 месяцев) Казалось бы, какой маленький срок, но за такой короткий промежуток времени ты стал для меня очень дорогим человеком🤍 Я могу доверить тебе буквально все, и не пожалеть, что так сделала. Знай, что я этим очень дорожу и верю, что так будет и дальше.
+
+Мне очень нравится, какой ты) Мне нравится, как ты относишься к другим людям, как ты любишь детей, как общаешься и заботишься о своих родных. Мне очень нравится, как ты поддерживаешь меня во время, всегда интересуешься моим состоянием, настроением, всегда стараешься его поднять. Всегда беспокоишься обо мне 🥹🥰 Спасибо тебе за все это🥰🥰🥰 Я очень рада и благодарна Богу, что ты у меня есть🥹❤️ Спасибо тебе за все, что ты делаешь для нас, спасибо за все твои советы, добрые слова, комплименты, поддержку.
+
+За все❤️ Я многому учусь у тебя и очень рада, что ты такой мудрый😘 У тебя есть много талантов, развивай их. Трудись для Бога, живи для Него и Он не оставит тебя. А я всегда поддержу тебя, выслушаю и помогу❤️ Я всегда буду рядом🤍 Молюсь о тебе🥰 Я очень сильно люблю тебя, скучаю и жду 19 декабря❤️❤️❤️</div>
+      <div class="signature">С любовью и благодарностью Богу 🤍</div>
+    </article>
+  </section>
+
+  <section id="reasons">
+    <div class="section-label">02 · Моя благодарность Богу</div>
+    <h2 class="section-title">25 причин, за что я благодарна Богу за тебя</h2>
+    <p class="lead">Каждая из них — от сердца.</p>
+    <ol class="reasons">
+      <li>За то, что мы встретились.</li>
+      <li>За то, что ты всегда поддерживаешь меня.</li>
+      <li>За то, что ты молишься обо мне.</li>
+      <li>За то, что ты говоришь мне комплименты.</li>
+      <li>За то, что ты говоришь мне, как ты меня любишь.</li>
+      <li>За то, что даёшь мне мудрые советы.</li>
+      <li>За то, что ты беспокоишься о моём внутреннем состоянии.</li>
+      <li>За то, что ты беспокоишься о моём моральном состоянии.</li>
+      <li>За то, что ты интересуешься моим настроением.</li>
+      <li>За то, что с тобой я чувствую себя любимой.</li>
+      <li>За то, что ты умеешь меня выслушать.</li>
+      <li>За то, что ты умеешь поднять мне настроение.</li>
+      <li>За то, что тебе небезразлично то, что я чувствую.</li>
+      <li>За то, что мне есть чему учиться у тебя.</li>
+      <li>За то, что ты любишь Бога.</li>
+      <li>За то, что ты очень добрый.</li>
+      <li>За то, что с тобой я могу быть собой.</li>
+      <li>За то, что ты стараешься ради наших отношений.</li>
+      <li>За то, что ты стал таким дорогим человеком для меня.</li>
+      <li>За то, что я могу доверять тебе.</li>
+      <li>За то, что даже через экран ты умеешь сделать так, чтобы я улыбалась.</li>
+      <li>За то, что расстояние не мешает нам становиться ближе.</li>
+      <li>За то, что мы можем говорить с тобой на любые темы.</li>
+      <li>За то, что ты мудрый.</li>
+      <li>За то, что ты такой, какой ты есть. ❤️</li>
+    </ol>
+  </section>
+
+  <section id="when">
+    <div class="section-label">03 · Я рядом, даже на расстоянии</div>
+    <h2 class="section-title">Открой, когда…</h2>
+    <p class="lead">Выбери момент — и прочитай мои слова для тебя.</p>
+
+    <div class="letters-list">
+      <article class="letter-item">
+        <button class="letter-toggle" type="button" aria-expanded="false">
+          <span class="letter-number">01</span>
+          <span class="letter-title">Открой, когда скучаешь по мне🥹</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="letter-content">Данил, если ты открыл это письмо, значит сейчас ты очень скучаешь по мне🥰 Знай, что это взаимно, но очень скоро мы будем с тобой вместе🥰 Поэтому, помни, что я очень люблю тебя, жду нашего разговора и тоже скучаю❤️</div>
+      </article>
+
+      <article class="letter-item">
+        <button class="letter-toggle" type="button" aria-expanded="false">
+          <span class="letter-number">02</span>
+          <span class="letter-title">Открой, когда грустно</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="letter-content">Данил, тебе не нужно всегда быть сильным. Можно и нужно быть всегда собой. Но помни, что когда грустно тебе, то грустно и мне, поэтому, я бы очень не хотела, чтобы ты расстраивался. Очень люблю тебя и верю, что все будет хорошо ❤️ Я молюсь о тебе🙏🏽🥰</div>
+      </article>
+
+      <article class="letter-item">
+        <button class="letter-toggle" type="button" aria-expanded="false">
+          <span class="letter-number">03</span>
+          <span class="letter-title">Открой, когда хочешь улыбнуться</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="letter-content">Срочное напоминание: одна прекрасная девушка очень сильно тебя любит. А еще она очень милая, когда серьезная, но при этом Даник хочет, чтобы она улыбалась😄☺️ Поэтому, она всегда не знает, что выбрать: быть милой, или просто улыбаться😅❤️</div>
+      </article>
+
+      <article class="letter-item">
+        <button class="letter-toggle" type="button" aria-expanded="false">
+          <span class="letter-number">04</span>
+          <span class="letter-title">Открой, когда захочешь узнать, о чём я молюсь за тебя</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="letter-content">Я всегда благодарю Бога за то, что он послал в мою жизнь тебя. Всегда я прошу, чтобы он дал мудрости тебе во всем, помог в решении всех вопросов, проблем, которые есть. Молюсь о твоей духовном состоянии. Молюсь, чтобы у тебя все было хорошо ❤️ Просто молюсь о тебе, потому что ты мне очень дорог🤍</div>
+      </article>
+
+      <article class="letter-item">
+        <button class="letter-toggle" type="button" aria-expanded="false">
+          <span class="letter-number">05</span>
+          <span class="letter-title">Открой, когда у тебя тяжёлый день</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="letter-content">Данил, в первую очередь хочу сказать, что я тебя люблю. Я верю в тебя, верю, что все будет хорошо. Я очень ценю все, что ты делаешь для нас, спасибо тебе за все🥰 Я молюсь о тебе 🤍</div>
+      </article>
+
+      <article class="letter-item">
+        <button class="letter-toggle" type="button" aria-expanded="false">
+          <span class="letter-number">06</span>
+          <span class="letter-title">Открой в день нашей встречи</span>
+          <span class="plus">+</span>
+        </button>
+        <div class="letter-content">Данил, я пишу это письмо и не знаю, какой сегодня день, в какое время мы встретились и как это было🙈 Мне даже трудно это представить, но я думаю, что все прошло не так, как мы себе это представляли. Мне интересно, что ты ощутил, когда увидел меня, что подумал… И как это все было) Я искренне верю, что все хорошо, надеюсь, что так и есть. Спасибо за все, что ты сделал, чтобы быть сейчас здесь.
+
+Я думаю, что время до свадьбы пройдет очень быстро, нам нужно правильно его использовать и правильно вести себя🤍 Я думаю, Бог даст мудрости и поможет нам во всем. Я тебя люблю❤️</div>
+      </article>
+    </div>
+
+    <p class="progress-note" id="progressNote">Открой все шесть писем — в конце тебя будет ждать ещё одно послание ♡</p>
+    <button class="final-button" id="showFinal" type="button" disabled>
+      Сначала открой все 6 писем ♡
+    </button>
+  </section>
+</main>
+
+<footer>
+  <div class="heart">♡</div>
+  <p>For Danil, with love</p>
+  <p>Спасибо Богу за тебя.<br>Я очень тебя люблю. 🤍</p>
+  <a class="backtop" href="#home">↑ Вернуться в начало</a>
+</footer>
+
+<!-- ПОСЛЕДНИЙ СЮРПРИЗ -->
+<div class="final-overlay" id="finalOverlay" hidden>
+  <section class="final-card" role="dialog" aria-modal="true" aria-labelledby="finalTitle">
+    <button class="final-close" id="closeFinal" type="button" aria-label="Закрыть">×</button>
+    <div class="final-ornament">✧ ♡ ✧</div>
+    <div class="eyebrow">И последнее, мой дорогой</div>
+    <h2 id="finalTitle">Спасибо Богу за тебя</h2>
+    <p class="final-message">Мой дорогой Даник🥹❤️
+
+Из всех подарков, которые могла подарить мне жизнь, я особенно благодарна Богу за то, что наши пути пересеклись.
+
+Я молюсь о тебе, верю в тебя и хочу, чтобы ты всегда помнил: ты очень дорог мне.
+
+Пусть Бог даёт тебе мудрости, укрепляет твою веру, хранит твоё сердце и направляет тебя во всём.
+
+Спасибо тебе за то, какой ты, за твою заботу, доброту и любовь. Я очень ценю то, что есть между нами.
+
+Я люблю тебя, Даник. И это письмо — ещё одно маленькое напоминание об этом. 🤍</p>
+    <div class="final-signature">С любовью и благодарностью Богу 🤍</div>
+    <div class="final-ornament">♡ ♡ ♡</div>
+  </section>
+</div>
+
+<script>
+/* Открытие конверта */
+const intro = document.getElementById('intro');
+document.getElementById('openEnvelope').addEventListener('click', () => {
+  intro.classList.add('opening');
+  window.setTimeout(() => {
+    intro.remove();
+    document.getElementById('home').scrollIntoView({ behavior: 'smooth' });
+  }, 850);
+});
+
+/* Письма раскрываются по нажатию */
+const items = [...document.querySelectorAll('.letter-item')];
+const opened = new Set();
+const finalButton = document.getElementById('showFinal');
+const progressNote = document.getElementById('progressNote');
+
+items.forEach(item => {
+  const button = item.querySelector('.letter-toggle');
+  button.addEventListener('click', () => {
+    const willOpen = !item.classList.contains('open');
+    item.classList.toggle('open', willOpen);
+    button.setAttribute('aria-expanded', String(willOpen));
+
+    if (willOpen) opened.add(item);
+
+    const count = opened.size;
+    if (count === items.length) {
+      progressNote.textContent = 'Ты прочитал все письма. Последний сюрприз ждёт тебя 🤍';
+      finalButton.disabled = false;
+      finalButton.textContent = 'Открыть последнее письмо ♡';
+    } else {
+      progressNote.textContent =
+        'Открыто писем: ' + count + ' из ' + items.length +
+        '. В конце тебя ждёт ещё одно послание ♡';
+    }
+  });
+});
+
+/* Финальное послание */
+const overlay = document.getElementById('finalOverlay');
+const closeButton = document.getElementById('closeFinal');
+
+finalButton.addEventListener('click', () => {
+  if (finalButton.disabled) return;
+  overlay.hidden = false;
+  document.body.style.overflow = 'hidden';
+  closeButton.focus();
+});
+
+function closeFinal() {
+  overlay.hidden = true;
+  document.body.style.overflow = '';
+  finalButton.focus();
+}
+
+closeButton.addEventListener('click', closeFinal);
+overlay.addEventListener('click', event => {
+  if (event.target === overlay) closeFinal();
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !overlay.hidden) closeFinal();
+});
+</script>
+</body>
+</html>
